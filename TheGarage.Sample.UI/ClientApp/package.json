@@ -8,8 +8,7 @@
     "debug": "ng serve --poll=2000",
     "build:ssr": "ng run TheGarage.Sample.UI:server:dev",
     "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
