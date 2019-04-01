@@ -1,0 +1,82 @@
+
+<div class="row">
+  <div class="col-md-9">
+    <h1>Garage Page</h1>
+    <p>This page shows your garage details.</p>
+  </div>
+  <div class="col-md-3 text-center">
+    <button type="button" class="btn btn-primary" (click)="refresh()">Refresh</button>
+  </div>
+</div>
+
+<p *ngIf="!myGarage"><em>Loading...</em></p>
+
+<div class="row" *ngIf="myGarage">
+  <div class="col-md-6">
+    <table class="table table-user-information">
+      <tbody>
+        <tr>
+          <th scope="row">Owner Name</th>
+          <td>{{ myGarage.owner.fullName }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Garage Name</th>
+          <td>{{ myGarage.garage.name }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Garage Address</th>
+          <td>{{ myGarage.garage.address }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Garage Status</th>
+          <td [ngSwitch]="true">
+            <span *ngSwitchCase="myGarage.garage.status==true" class="badge badge-success">Online</span>
+            <span *ngSwitchDefault class="badge badge-danger">Offline</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <table class='table table-striped'>
+      <thead>
+        <tr>
+          <th>Door</th>
+          <th>IP Address</th>
+          <th>Status</th>
+          <th>History</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let door of myGarage.garage.doors; let i = index" [attr.data-index]="i">
+          <tr>
+            <td>{{ i+1 }}</td>
+            <td>{{ door.ipAddress }}</td>
+            <td [ngSwitch]="true">
+              <span *ngSwitchCase="door.status==true" class="badge badge-success">Online</span>
+              <span *ngSwitchDefault class="badge badge-danger">Offline</span>
+            </td>
+            <td>
+              <button class="btn btn-primary" type="button" (click)="collapseHistory($event,ele)">Show</button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4" #ele [style.display]="'none'">
+              <div class="card card-body">
+                <div class="row" *ngFor="let update of door.updates.slice(0,5)">
+                  <div class="col-md-12">
+                    Time: {{ update.updateTime | date :  "dd.MM.yyyy HH:mm:ss" }} - Old Version:
+                    <ng-container [ngSwitch]="true">
+                      <span *ngSwitchCase="update.previousStatus==true" class="badge badge-success">Online</span>
+                      <span *ngSwitchDefault class="badge badge-danger">Offline</span>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
